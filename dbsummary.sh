@@ -1,7 +1,8 @@
-Last login: Thu Oct 12 10:36:21 on ttys000
+#!/bin/bash
+
 # Author: David T. Noland
 # Title: Database Summary Report
-# Version: 1.0
+# Version: 1.2
 # Command: dbsummary
 
 function dbsummary() {
@@ -17,13 +18,26 @@ function dbsummary() {
    myirows=$(wp db query "SELECT SUM(table_rows) FROM information_schema.TABLES WHERE table_schema = '${db}' and TABLE_TYPE='BASE TABLE' and Engine='MyISAM';" | tail -1)
    innorows=$(wp db query "SELECT SUM(table_rows) FROM information_schema.TABLES WHERE table_schema = '${db}' and TABLE_TYPE='BASE TABLE' and Engine='InnoDB';" | tail -1)
 
-# output layout header
-echo -e "${purple}Install name: ${NC}${yellow}${install}${NC}\t\t${purple}Database name: ${NC}${yellow}${db}${NC}\t\t${purple}Total database size: ${NC}${yellow}${totalMB} MB${NC}"
-echo -e "${purple}MyISAM tables: ${yellow}${myi}${NC}\t\t${purple}InnoDB tables: ${NC}${yellow}${inno}${NC}\t\t\t${purple}Total tables: ${NC}${yellow}${tables}${NC}"
-echo -e "${purple}MyISAM rows: ${NC}${yellow}${myirows}${NC}\t\t\t${purple}InnoDB Rows: ${yellow}${innorows}${NC}\t\t\t${purple}Total rows: ${NC}${yellow}${rows}${NC}"
-echo ""
+# output layout header 
+   printf "\n${purple}Install name: ${yellow}%-20s ${purple}Database name: ${yellow}%-20s ${purple}Total database size: ${yellow}%s MB${NC}\n" ${install} ${db} ${totalMB}
+   printf "${purple}MyISAM tables: ${yellow}%-19s ${purple}InnoDB tables: ${yellow}%-20s ${purple}Total tables: ${yellow}%s ${NC}\n" ${myi} ${inno} ${tables}
+   printf "${purple}MyISAM rows: ${yellow}%-21s ${purple}InnoDB Rows: ${yellow}%-22s ${purple}Total rows: ${yellow}%s ${NC}\n\n" ${myirows} ${innorows} ${rows}
+   echo ""
 
 echo -e "${purple}Database tables sorted by table size: ${NC}${yellow}${db}${NC}"
 # Body of report
    wp db query "SELECT TABLE_NAME as 'Table', Engine, table_rows as 'Rows', data_length as 'Data_size_in_MB', index_length as 'Index_size_in_MB', round(((data_length + index_length) / 1024 / 1024),2) as 'Total_size_MB' FROM information_schema.TABLES WHERE table_schema = '${db}' and TABLE_TYPE='BASE TABLE' ORDER BY Engine, Total_size_MB DESC;"
+
+#Option to convert myisam to innodb   
+#   if ["$myi" -gt 0]; then {
+#     echo -en "${yellow}You have${NC} ${red}${myi}${NC}${yellow} MyISAM tables.  Would you like to convert them to InnoDB? [y/n]"
+#     read myiconvert
+#     if [["$myiconvert" == 'y' && "$myiconvert" == 'Y']]; then {
+#       wp db query "SELECT table_name, Engine FROM information_schema.tables WHERE table_schema='${db}' AND Engine='InnoDB';"
+#     }
+#   elif [["$myiconvert" == 'n' && "$myiconvert" == 'N']]; then {
+#     echo -e "\nHave a great day!"
+#     }
+#   }
+#   fi;
 }

@@ -1,0 +1,11 @@
+# Database Summary Report changelog
+
+v1.0
+- Primary code base
+
+v1.1
+-Fixed minor calculation bug
+
+v1.2
+-Fixed tab errors (Thanks to Jeffrey Crane!)
+-Fixed minor cosmetic error to remove "MB" from row count and table count totals
