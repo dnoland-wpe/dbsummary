@@ -28,16 +28,4 @@ echo -e "${purple}Database tables sorted by table size: ${NC}${yellow}${db}${NC}
 # Body of report
    wp db query "SELECT TABLE_NAME as 'Table', Engine, table_rows as 'Rows', data_length as 'Data_size_in_MB', index_length as 'Index_size_in_MB', round(((data_length + index_length) / 1024 / 1024),2) as 'Total_size_MB' FROM information_schema.TABLES WHERE table_schema = '${db}' and TABLE_TYPE='BASE TABLE' ORDER BY Engine, Total_size_MB DESC;"
 
-#Option to convert myisam to innodb   
-#   if ["$myi" -gt 0]; then {
-#     echo -en "${yellow}You have${NC} ${red}${myi}${NC}${yellow} MyISAM tables.  Would you like to convert them to InnoDB? [y/n]"
-#     read myiconvert
-#     if [["$myiconvert" == 'y' && "$myiconvert" == 'Y']]; then {
-#       wp db query "SELECT table_name, Engine FROM information_schema.tables WHERE table_schema='${db}' AND Engine='InnoDB';"
-#     }
-#   elif [["$myiconvert" == 'n' && "$myiconvert" == 'N']]; then {
-#     echo -e "\nHave a great day!"
-#     }
-#   }
-#   fi;
 }
