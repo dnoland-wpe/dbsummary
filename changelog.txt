@@ -3,9 +3,9 @@
 v1.0
 - Primary code base
 
-v1.1
+v1.0beta
 -Fixed minor calculation bug
-
-v1.2
 -Fixed tab errors (Thanks to Jeffrey Crane!)
 -Fixed minor cosmetic error to remove "MB" from row count and table count totals
+-Added section of key optimization variables
+-Made some color adjustments for readability
