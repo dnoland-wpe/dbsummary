@@ -9,3 +9,7 @@ v1.0beta
 -Fixed minor cosmetic error to remove "MB" from row count and table count totals
 -Added section of key optimization variables
 -Made some color adjustments for readability
+-Added multisite check
+-Added multisite subsite counter
+-Added sort by row/size option
+-Added autoload count with color warning above 800k threshold
