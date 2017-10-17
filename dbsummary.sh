@@ -2,7 +2,7 @@
 
 # Author: David T. Noland
 # Title: Database Summary Report
-# Version: 1.0beta
+# Version: 1.0
 # Command: dbsummary
 
 function dbsummary() {
@@ -77,12 +77,16 @@ function dbsummary() {
 # Body of report
    if [[ ${table_sort} =~ ^(rows|ROWS|r|R)$ ]];
    then {
-     echo -e "${NC}\n${teal}Top 20 database tables sorted by row count: ${NC}${yellow}${db}${NC}"
-     wp db query "SELECT TABLE_NAME as 'Table', Engine, table_rows as 'Rows', data_length as 'Data_size_in_MB', index_length as 'Index_size_in_MB', round(((data_length + index_length) / 1024 / 1024),2) as 'Total_size_MB' FROM information_schema.TABLES WHERE table_schema = '${db}' and TABLE_TYPE='BASE TABLE' ORDER BY Engine, Rows DESC LIMIT 20;"
+     echo -e "${NC}\n${teal}Top 20 ${NC}${yellow}MyISAM${NC}${teal} database tables sorted by row count: ${NC}${yellow}${db}${NC}"
+     wp db query "SELECT TABLE_NAME as 'Table', Engine, table_rows as 'Rows', data_length as 'Data_size_in_MB', index_length as 'Index_size_in_MB', round(((data_length + index_length) / 1024 / 1024),2) as 'Total_size_MB' FROM information_schema.TABLES WHERE table_schema = '${db}' and TABLE_TYPE='BASE TABLE' and Engine='MyISAM' ORDER BY  table_rows DESC LIMIT 20;"
+     echo -e "${NC}\n${teal}Top 20 ${NC}${yellow}InnoDB${NC}${teal} database tables sorted by row count: ${NC}${yellow}${db}${NC}"
+     wp db query "SELECT TABLE_NAME as 'Table', Engine, table_rows as 'Rows', data_length as 'Data_size_in_MB', index_length as 'Index_size_in_MB', round(((data_length + index_length) / 1024 / 1024),2) as 'Total_size_MB' FROM information_schema.TABLES WHERE table_schema = '${db}' and TABLE_TYPE='BASE TABLE' and Engine='InnoDB' ORDER BY table_rows DESC LIMIT 20;"
    }
    else {
-     echo -e "${NC}\n${teal}Top 20 database tables sorted by table size: ${NC}${yellow}${db}${NC}"
-     wp db query "SELECT TABLE_NAME as 'Table', Engine, table_rows as 'Rows', data_length as 'Data_size_in_MB', index_length as 'Index_size_in_MB', round(((data_length + index_length) / 1024 / 1024),2) as 'Total_size_MB' FROM information_schema.TABLES WHERE table_schema = '${db}' and TABLE_TYPE='BASE TABLE' ORDER BY Engine, Total_size_MB DESC LIMIT 20;"
+     echo -e "${NC}\n${teal}Top 20 ${NC}${yellow}MyISAM${NC}${teal} database tables sorted by table size: ${NC}${yellow}${db}${NC}"
+     wp db query "SELECT TABLE_NAME as 'Table', Engine, table_rows as 'Rows', data_length as 'Data_size_in_MB', index_length as 'Index_size_in_MB', round(((data_length + index_length) / 1024 / 1024),2) as 'Total_size_MB' FROM information_schema.TABLES WHERE table_schema = '${db}' and TABLE_TYPE='BASE TABLE' and Engine='MyISAM' ORDER BY Total_size_MB DESC LIMIT 20;"
+     echo -e "${NC}\n${teal}Top 20 ${NC}${yellow}InnoDB${NC}${teal} database tables sorted by table size: ${NC}${yellow}${db}${NC}"
+     wp db query "SELECT TABLE_NAME as 'Table', Engine, table_rows as 'Rows', data_length as 'Data_size_in_MB', index_length as 'Index_size_in_MB', round(((data_length + index_length) / 1024 / 1024),2) as 'Total_size_MB' FROM information_schema.TABLES WHERE table_schema = '${db}' and TABLE_TYPE='BASE TABLE' and Engine='InnoDB' ORDER BY Total_size_MB DESC LIMIT 20;"
    }
   fi
 }
