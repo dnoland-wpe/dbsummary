@@ -47,7 +47,7 @@ function dbsummary() {
 
    if [ $multisite = "TRUE" ];
    then {
-      echo -e "${teal}Multisite: ${NC}${red}${multisite} - MULTISITE NOT FULLY SUPPORTED IN THIS REPORT.${NC}"
+      echo -e "${teal}Multisite: ${NC}${yellow}${multisite}${NC}"
       echo -e "${teal}Number of subsites: ${NC}$(wp db query "SELECT COUNT(*) FROM ${table_prefix}blogs WHERE blog_id > 1" | tail -1)\n"
     }
    else
